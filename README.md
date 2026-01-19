@@ -116,6 +116,18 @@ The Slack API token requires the following scopes:
 
 Output is in JSON format, grouped by thread.
 
+**Note:** The output structure is not the raw Slack API response. Messages are transformed into a simplified, consistent format:
+
+| slago field | Source |
+|-------------|--------|
+| `id` | Message timestamp (`ts`) |
+| `content` | Message text |
+| `author` | User ID |
+| `timestamp` | Parsed to ISO 8601 format |
+| `mentions` | Extracted from `<@USER\|name>` patterns in text |
+| `attached_links` | Extracted from text and attachments |
+| `is_thread_parent` | Calculated from `thread_ts` |
+
 ```json
 [
   {
