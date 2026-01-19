@@ -26,6 +26,7 @@ It supports:
 	// Add subcommands
 	rootCmd.AddCommand(newGetCmd())
 	rootCmd.AddCommand(newListCmd())
+	rootCmd.AddCommand(newMergeCmd())
 	rootCmd.AddCommand(newVersionCmd())
 
 	return rootCmd
