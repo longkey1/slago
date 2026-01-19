@@ -52,7 +52,7 @@ Examples:
 	cmd.Flags().StringVar(&listTo, "to", "", "End date (YYYY-MM-DD)")
 	cmd.Flags().BoolVar(&listThread, "thread", false, "Get entire threads")
 	cmd.Flags().StringVar(&listAuthor, "author", "", "Filter by author")
-	cmd.Flags().StringSliceVar(&listMentions, "mention", nil, "Filter by mention (can be specified multiple times)")
+	cmd.Flags().StringSliceVar(&listMentions, "mention", nil, "Filter by mention (comma-separated User IDs or @group-names)")
 	cmd.Flags().IntVarP(&listParallel, "parallel", "p", 1, "Number of parallel workers")
 
 	return cmd
@@ -60,7 +60,7 @@ Examples:
 
 func runList(cmd *cobra.Command, args []string) error {
 	// Load config
-	cfg, err := config.Load(cfgFile)
+	cfg, err := config.Load()
 	if err != nil {
 		return fmt.Errorf("failed to load config: %w", err)
 	}

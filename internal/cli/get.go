@@ -34,7 +34,7 @@ func runGet(cmd *cobra.Command, args []string) error {
 	url := args[0]
 
 	// Load config
-	cfg, err := config.Load(cfgFile)
+	cfg, err := config.Load()
 	if err != nil {
 		return fmt.Errorf("failed to load config: %w", err)
 	}

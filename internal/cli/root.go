@@ -4,10 +4,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var (
-	cfgFile string
-	token   string
-)
+var token string
 
 // NewRootCmd creates the root command
 func NewRootCmd() *cobra.Command {
@@ -24,7 +21,6 @@ It supports:
 	}
 
 	// Global flags
-	rootCmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", "", "config file (default is ~/.slago.yaml)")
 	rootCmd.PersistentFlags().StringVar(&token, "token", "", "Slack API token (overrides SLACK_API_TOKEN)")
 
 	// Add subcommands

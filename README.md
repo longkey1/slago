@@ -4,12 +4,6 @@ Slack Log Collector CLI - A command-line tool for collecting Slack messages
 
 ## Installation
 
-### Using Homebrew
-
-```bash
-brew install longkey1/tap/slago
-```
-
 ### Download from Releases
 
 Download the binary from [Releases](https://github.com/longkey1/slago/releases).
@@ -29,17 +23,7 @@ make build
 ```bash
 export SLACK_API_TOKEN="xoxp-..."  # Required
 export SLACK_AUTHOR="your-username"  # Optional
-export SLACK_MENTION="U12345678"     # Optional
-```
-
-Or create a config file at `~/.slago.yaml`:
-
-```yaml
-token: xoxp-...
-author: your-username
-mention:
-  - U12345678
-  - @team-name
+export SLACK_MENTION="U12345678,@team-name"  # Optional: comma-separated User IDs or @group-names
 ```
 
 ### Commands
@@ -72,7 +56,7 @@ slago list --from 2025-01-01 --to 2025-01-15
 
 # Combine options
 slago list -m 2025-01 --thread --author U12345678
-slago list -d 2025-01-15 --mention U111 --mention @team
+slago list -d 2025-01-15 --mention U111,@team
 
 # Parallel execution
 slago list -m 2025-01 --parallel 4
@@ -88,10 +72,9 @@ slago version
 
 ### Global Flags
 
-| Flag | Short | Description | Default |
-|------|-------|-------------|---------|
-| `--config` | `-c` | Config file path | `~/.slago.yaml` |
-| `--token` | | Slack API token | `$SLACK_API_TOKEN` |
+| Flag | Description | Default |
+|------|-------------|---------|
+| `--token` | Slack API token | `$SLACK_API_TOKEN` |
 
 ### get Flags
 
@@ -116,7 +99,7 @@ slago version
 |------|-------|-------------|---------|
 | `--thread` | | Fetch entire threads | `false` |
 | `--author` | | Filter by author | `$SLACK_AUTHOR` |
-| `--mention` | | Filter by mention (can be specified multiple times) | `$SLACK_MENTION` |
+| `--mention` | | Filter by mention (comma-separated User IDs or `@group-names`) | `$SLACK_MENTION` |
 | `--parallel` | `-p` | Number of parallel workers | `1` |
 
 ## Required Permissions
@@ -169,15 +152,6 @@ make test
 
 # Clean
 make clean
-
-# Install tools
-make tools
-
-# Release (dry run)
-make release type=patch
-
-# Release (actual)
-make release type=patch dryrun=false
 ```
 
 ## License
