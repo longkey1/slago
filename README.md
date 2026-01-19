@@ -64,6 +64,28 @@ slago list -m 2025-01 --parallel 4
 
 Output is saved to `logs/YYYY/MM/DD/slack.json`.
 
+#### merge
+
+Merge multiple JSON files and deduplicate threads/messages.
+
+```bash
+# Merge all JSON files in a directory
+slago merge ./logs
+
+# With explicit --dir flag
+slago merge --dir ./logs
+
+# Filter by file pattern
+slago merge ./logs --pattern "slack*.json"
+slago merge ./logs -p "2025-*.json"
+
+# Recursive search (include subdirectories)
+slago merge ./logs --recursive
+slago merge ./logs -r -p "*.json"
+```
+
+Output is written to stdout.
+
 #### version
 
 ```bash
@@ -90,8 +112,8 @@ slago version
 |------|-------|-------------|
 | `--day` | `-d` | Single day (YYYY-MM-DD) |
 | `--month` | `-m` | Entire month (YYYY-MM) |
-| `--from` | | Start date (YYYY-MM-DD) |
-| `--to` | | End date (YYYY-MM-DD) |
+| `--from` | | Start date (YYYY-MM-DD, inclusive) |
+| `--to` | | End date (YYYY-MM-DD, inclusive) |
 
 **Other Flags:**
 
@@ -101,6 +123,14 @@ slago version
 | `--author` | | Filter by author | `$SLACK_AUTHOR` |
 | `--mention` | | Filter by mention (User ID or `@username`/`@group-name`, repeatable) | `$SLACK_MENTION` |
 | `--parallel` | `-p` | Number of parallel workers | `1` |
+
+### merge Flags
+
+| Flag | Short | Description | Default |
+|------|-------|-------------|---------|
+| `--dir` | `-d` | Target directory | |
+| `--pattern` | `-p` | File name glob pattern | `*.json` |
+| `--recursive` | `-r` | Search subdirectories recursively | `false` |
 
 ## Required Permissions
 
