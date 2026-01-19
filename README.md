@@ -23,7 +23,7 @@ make build
 ```bash
 export SLACK_API_TOKEN="xoxp-..."  # Required
 export SLACK_AUTHOR="your-username"  # Optional
-export SLACK_MENTION="U12345678,@team-name"  # Optional: comma-separated User IDs or @group-names
+export SLACK_MENTION="U12345678,@john.doe,@team-name"  # Optional: comma-separated
 ```
 
 ### Commands
@@ -56,7 +56,7 @@ slago list --from 2025-01-01 --to 2025-01-15
 
 # Combine options
 slago list -m 2025-01 --thread --author U12345678
-slago list -d 2025-01-15 --mention U111,@team
+slago list -d 2025-01-15 --mention U111 --mention @john.doe --mention @team
 
 # Parallel execution
 slago list -m 2025-01 --parallel 4
@@ -99,7 +99,7 @@ slago version
 |------|-------|-------------|---------|
 | `--thread` | | Fetch entire threads | `false` |
 | `--author` | | Filter by author | `$SLACK_AUTHOR` |
-| `--mention` | | Filter by mention (comma-separated User IDs or `@group-names`) | `$SLACK_MENTION` |
+| `--mention` | | Filter by mention (User ID or `@username`/`@group-name`, repeatable) | `$SLACK_MENTION` |
 | `--parallel` | `-p` | Number of parallel workers | `1` |
 
 ## Required Permissions
