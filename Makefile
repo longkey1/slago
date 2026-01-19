@@ -36,29 +36,57 @@ release: ## Release a new version (usage: make release type=patch|minor|major [d
 		*) echo "Invalid type: $$type. Use patch, minor, or major."; exit 1 ;; \
 	esac; \
 	echo "Current version: $(VERSION)"; \
-	echo "New version: $$new_version"; \
+	echo "Next version: $$new_version"; \
 	if [ "$$dryrun" = "false" ]; then \
-		git tag -a "$$new_version" -m "Release $$new_version"; \
-		git push origin "$$new_version"; \
-		echo "Released $$new_version"; \
+		echo "Creating new tag $$new_version..."; \
+		git push origin master --no-verify --force-with-lease; \
+		git tag -a "$$new_version" -m "Release of $$new_version"; \
+		git push origin "$$new_version" --no-verify --force-with-lease; \
+		echo "Tag $$new_version has been created and pushed"; \
+		echo "GitHub Actions will build the release binary automatically"; \
 	else \
-		echo "[dryrun] Would create and push tag: $$new_version"; \
+		echo "[DRY RUN] Showing what would be done..."; \
+		echo "Would push to origin/master"; \
+		echo "Would create tag: $$new_version"; \
+		echo "Would push tag to origin: $$new_version"; \
+		echo ""; \
+		echo "To execute this release, run:"; \
+		echo "  make release type=$$type dryrun=false"; \
+		echo "Dry run complete."; \
 	fi
 
 .PHONY: re-release
 re-release: ## Re-release an existing version (usage: make re-release [tag=<tag>] [dryrun=false])
 	@tag=$${tag:-$(VERSION)}; \
 	dryrun=$${dryrun:-true}; \
-	echo "Re-releasing: $$tag"; \
+	echo "Target tag: $$tag"; \
 	if [ "$$dryrun" = "false" ]; then \
-		gh release delete "$$tag" --yes 2>/dev/null || true; \
-		git push origin --delete "$$tag" 2>/dev/null || true; \
-		git tag -d "$$tag" 2>/dev/null || true; \
+		echo "Deleting GitHub release..."; \
+		gh release delete "$$tag" -y; \
+		echo "Deleting local tag..."; \
+		git tag -d "$$tag"; \
+		echo "Deleting remote tag..."; \
+		git push origin ":refs/tags/$$tag" --no-verify --force; \
+		echo "Recreating tag on HEAD..."; \
 		git tag -a "$$tag" -m "Release $$tag"; \
-		git push origin "$$tag"; \
-		echo "Re-released $$tag"; \
+		echo "Pushing tag to origin..."; \
+		git push origin "$$tag" --no-verify --force-with-lease; \
+		echo "Recreating GitHub release..."; \
+		gh release create "$$tag" --title "$$tag" --notes "Re-release of $$tag"; \
+		echo "GitHub Actions will build the release binary automatically"; \
+		echo "Done!"; \
 	else \
-		echo "[dryrun] Would delete and recreate tag: $$tag"; \
+		echo "[DRY RUN] Showing what would be done..."; \
+		echo "Would delete release: $$tag"; \
+		echo "Would delete local tag: $$tag"; \
+		echo "Would delete remote tag: $$tag"; \
+		echo "Would create new tag at HEAD: $$tag"; \
+		echo "Would push tag to origin: $$tag"; \
+		echo "Would create new release for: $$tag"; \
+		echo ""; \
+		echo "To execute this re-release, run:"; \
+		echo "  make re-release tag=$$tag dryrun=false"; \
+		echo "Dry run complete."; \
 	fi
 
 .PHONY: help
