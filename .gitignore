@@ -19,6 +19,7 @@ go.work.sum
 # Environment
 .env
 .envrc
+.direnv/
 
 # Cache
 .cache/

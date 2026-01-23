@@ -21,7 +21,7 @@ builds:
     ignore:
       - goos: darwin
         goarch: arm
-    main: ./cmd/slago
+    main: .
     ldflags:
       - -s -w
       - -X main.version={{.Version}}

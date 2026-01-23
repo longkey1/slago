@@ -5,7 +5,7 @@ export PRODUCT_NAME := slago
 
 .PHONY: build
 build: ## Build the application to ./bin/
-	go build -o ./bin/$(PRODUCT_NAME) ./cmd/slago
+	go build -o ./bin/$(PRODUCT_NAME) .
 
 .PHONY: clean
 clean: ## Clean build artifacts

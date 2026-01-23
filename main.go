@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	"github.com/longkey1/slago/internal/cli"
+	"github.com/longkey1/slago/cmd"
 )
 
 // Version information (set by ldflags)
@@ -14,9 +14,9 @@ var (
 )
 
 func main() {
-	cli.SetVersion(version, commit, date)
+	cmd.SetVersion(version, commit, date)
 
-	if err := cli.Execute(); err != nil {
+	if err := cmd.Execute(); err != nil {
 		os.Exit(1)
 	}
 }
