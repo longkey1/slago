@@ -1,23 +1,36 @@
 .DEFAULT_GOAL := help
 
 export GO_VERSION=$(shell grep "^go " go.mod | sed 's/^go //')
-export PRODUCT_NAME := slago
+export PRODUCT_NAME=$(shell cat .product_name 2>/dev/null || echo "unknown")
 
 .PHONY: build
-build: ## Build the application to ./bin/
-	go build -o ./bin/$(PRODUCT_NAME) .
-
-.PHONY: clean
-clean: ## Clean build artifacts
-	rm -rf ./bin .cache
+build: ## Build the binary to ./bin/
+	@mkdir -p bin
+	go build -o bin/$(PRODUCT_NAME)
 
 .PHONY: test
 test: ## Run tests
 	go test ./...
 
+.PHONY: fmt
+fmt: ## Format code
+	go fmt ./...
+
+.PHONY: vet
+vet: ## Vet code
+	go vet ./...
+
+.PHONY: tidy
+tidy: ## Tidy dependencies
+	go mod tidy
+
+.PHONY: clean
+clean: ## Clean build artifacts
+	rm -rf bin/
+
 .PHONY: tools
 tools: ## Install tools
-	go install github.com/goreleaser/goreleaser/v2@latest
+	go install github.com/goreleaser/goreleaser@latest
 
 .PHONY: release
 
