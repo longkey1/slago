@@ -1,6 +1,6 @@
 # Build outputs
-bin/
-dist/
+/bin/
+/dist/
 
 # Executables
 *.exe
@@ -15,6 +15,7 @@ dist/
 # Go workspace
 go.work
 go.work.sum
+vendor/
 
 # Environment
 .env
@@ -22,7 +23,7 @@ go.work.sum
 .direnv/
 
 # Cache
-.cache/
+/.cache/
 
 # IDE
 .idea/

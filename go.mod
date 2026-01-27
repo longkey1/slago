@@ -1,6 +1,6 @@
 module github.com/longkey1/slago
 
-go 1.25.5
+go 1.25
 
 require (
 	github.com/slack-go/slack v0.17.3
