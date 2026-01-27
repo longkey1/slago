@@ -27,8 +27,7 @@ builds:
       - -X github.com/longkey1/slago/internal/version.BuildTime={{.Date}}
 
 archives:
-  - format: tar.gz
-    name_template: >-
+  - name_template: >-
       {{ .ProjectName }}_
       {{- title .Os }}_
       {{- if eq .Arch "amd64" }}x86_64
