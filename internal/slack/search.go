@@ -13,10 +13,12 @@ import (
 
 // SearchOptions contains options for searching messages
 type SearchOptions struct {
-	Author   string
-	Mentions []string
-	After    time.Time
-	Before   time.Time
+	Author          string
+	Mentions        []string
+	Channels        []string
+	ExcludeChannels []string
+	After           time.Time
+	Before          time.Time
 }
 
 const searchMaxRetries = 5
@@ -114,6 +116,14 @@ func (c *Client) buildSearchQuery(opts SearchOptions) string {
 		} else {
 			parts = append(parts, fmt.Sprintf("@%s", mention))
 		}
+	}
+
+	for _, channel := range opts.Channels {
+		parts = append(parts, fmt.Sprintf("in:%s", channel))
+	}
+
+	for _, channel := range opts.ExcludeChannels {
+		parts = append(parts, fmt.Sprintf("-in:%s", channel))
 	}
 
 	if !opts.After.IsZero() {

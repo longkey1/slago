@@ -14,14 +14,16 @@ import (
 )
 
 var (
-	listDay      string
-	listMonth    string
-	listFrom     string
-	listTo       string
-	listThread   bool
-	listAuthor   string
-	listMentions []string
-	listParallel int
+	listDay             string
+	listMonth           string
+	listFrom            string
+	listTo              string
+	listThread          bool
+	listAuthor          string
+	listMentions        []string
+	listChannels        []string
+	listExcludeChannels []string
+	listParallel        int
 )
 
 func newListCmd() *cobra.Command {
@@ -42,7 +44,9 @@ Examples:
   slago list --month 2025-01
   slago list --from 2025-01-01 --to 2025-01-15
   slago list -m 2025-01 --thread --author U12345678
-  slago list -d 2025-01-15 --mention U111 --mention @team`,
+  slago list -d 2025-01-15 --mention U111 --mention @team
+  slago list -m 2025-01 --channel general --channel random
+  slago list -d 2025-01-15 --exclude-channel announcements`,
 		RunE: runList,
 	}
 
@@ -53,6 +57,8 @@ Examples:
 	cmd.Flags().BoolVar(&listThread, "thread", false, "Get entire threads")
 	cmd.Flags().StringVar(&listAuthor, "author", "", "Filter by author")
 	cmd.Flags().StringSliceVar(&listMentions, "mention", nil, "Filter by mention (comma-separated User IDs or @group-names)")
+	cmd.Flags().StringSliceVar(&listChannels, "channel", nil, "Filter by channel (comma-separated channel names)")
+	cmd.Flags().StringSliceVar(&listExcludeChannels, "exclude-channel", nil, "Exclude channels (comma-separated channel names)")
 	cmd.Flags().IntVarP(&listParallel, "parallel", "p", 1, "Number of parallel workers")
 
 	return cmd
@@ -207,10 +213,12 @@ func processdays(client *slack.Client, days []time.Time, parallel int) []collect
 
 func processDay(client *slack.Client, day time.Time) collector.DayResult {
 	opts := collector.ListOptions{
-		Date:       day,
-		Author:     listAuthor,
-		Mentions:   listMentions,
-		WithThread: listThread,
+		Date:            day,
+		Author:          listAuthor,
+		Mentions:        listMentions,
+		Channels:        listChannels,
+		ExcludeChannels: listExcludeChannels,
+		WithThread:      listThread,
 	}
 
 	result, err := collector.List(client, opts)

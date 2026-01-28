@@ -11,10 +11,12 @@ import (
 
 // ListOptions contains options for the list command
 type ListOptions struct {
-	Date       time.Time
-	Author     string
-	Mentions   []string
-	WithThread bool
+	Date            time.Time
+	Author          string
+	Mentions        []string
+	Channels        []string
+	ExcludeChannels []string
+	WithThread      bool
 }
 
 // DayResult contains the result of collecting messages for a day
@@ -32,10 +34,12 @@ func List(client *slack.Client, opts ListOptions) (*DayResult, error) {
 	nextDate := opts.Date.AddDate(0, 0, 1)
 
 	searchOpts := slack.SearchOptions{
-		Author:   opts.Author,
-		Mentions: opts.Mentions,
-		After:    prevDate,
-		Before:   nextDate,
+		Author:          opts.Author,
+		Mentions:        opts.Mentions,
+		Channels:        opts.Channels,
+		ExcludeChannels: opts.ExcludeChannels,
+		After:           prevDate,
+		Before:          nextDate,
 	}
 
 	messages, err := client.SearchMessages(searchOpts)

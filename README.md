@@ -58,6 +58,11 @@ slago list --from 2025-01-01 --to 2025-01-15
 slago list -m 2025-01 --thread --author U12345678
 slago list -d 2025-01-15 --mention U111 --mention @john.doe --mention @team
 
+# Filter by channels
+slago list -m 2025-01 --channel general --channel random
+slago list -d 2025-01-15 --exclude-channel announcements
+slago list -m 2025-01 --channel general,random --exclude-channel bot-logs
+
 # Parallel execution
 slago list -m 2025-01 --parallel 4
 ```
@@ -122,6 +127,8 @@ slago version
 | `--thread` | | Fetch entire threads | `false` |
 | `--author` | | Filter by author | `$SLACK_AUTHOR` |
 | `--mention` | | Filter by mention (User ID or `@username`/`@group-name`, repeatable) | `$SLACK_MENTION` |
+| `--channel` | | Filter by channel name (repeatable, comma-separated) | |
+| `--exclude-channel` | | Exclude channel name (repeatable, comma-separated) | |
 | `--parallel` | `-p` | Number of parallel workers | `1` |
 
 ### merge Flags
